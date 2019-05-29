@@ -59,7 +59,11 @@ class Property
     db.prepare("find", sql)
     property = db.exec_prepared("find", values)
     db.close
-    return Property.new(property[0])
+    if property.ntuples != 0
+      return Property.new(property[0])
+    else
+      return nil
+    end
   end
 
   def Property.find_by_address(address)
@@ -69,7 +73,7 @@ class Property
     db.prepare("find_by_address", sql)
     property = db.exec_prepared("find_by_address", values)
     db.close
-    if property.map{} != []
+    if property.ntuples != 0
       return Property.new(property[0])
     else
       return nil
@@ -83,7 +87,7 @@ class Property
     db.prepare("find_value", sql)
     properties = db.exec_prepared("find_value", values)
     db.close
-    if properties.map{} != []
+    if properties.ntuples != 0
       return properties.map{|property| Property.new(property)}
     else
       return nil
